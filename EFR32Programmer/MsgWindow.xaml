@@ -1,0 +1,39 @@
+﻿<Window
+    x:Class="EFR32Programmer.MsgWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:EFR32Programmer"
+    mc:Ignorable="d"
+    Height="540"
+    Width="540"
+    MinHeight="540"
+    MinWidth="540">
+    <DockPanel>
+        <DockPanel
+            DockPanel.Dock="Top">
+            <TextBox
+                DockPanel.Dock="Left"
+                Text="{Binding Step}"
+                IsReadOnly="True"
+                Width="120"
+                Margin="5"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" />
+            <TextBox
+                Text="{Binding Result}"
+                IsReadOnly="True"
+                Height="60"
+                Margin="5"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"/>
+        </DockPanel>
+        <TextBox
+            TextWrapping="WrapWithOverflow"
+            Text="{Binding DetailMsg}"
+            IsReadOnly="True"
+            VerticalScrollBarVisibility="Auto"
+            Margin="5" />
+    </DockPanel>
+</Window>

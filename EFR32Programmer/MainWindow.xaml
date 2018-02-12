@@ -1,0 +1,534 @@
+﻿<Window
+    x:Class="EFR32Programmer.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:EFR32Programmer"
+    mc:Ignorable="d"
+    Title="MainWindow"
+    Height="500"
+    Width="1200"
+    Loaded="MainWindow_LoadedAsync">
+    <TabControl>
+        <TabItem
+            Header="Programming"
+            DataContext="{Binding ProgView}">
+            <DockPanel>
+                <DockPanel
+                    DockPanel.Dock="Bottom">
+                    <Button
+                        Content="Start"
+                        IsEnabled="{Binding ButtonEnable}"
+                        Height="30"
+                        Width="120"
+                        DockPanel.Dock="Right"
+                        Margin="5"
+                        Click="ButtonStart_ClickAsync" />
+                    <ProgressBar
+                        DockPanel.Dock="Bottom"
+                        Value="{Binding CurrentStep}"
+                        Maximum="{Binding TotalSteps}"
+                        Minimum="0"
+                        Height="30"
+                        Margin="5" />
+                </DockPanel>
+                <DataGrid
+                    ItemsSource="{Binding ProcessList}"
+                    MouseDoubleClick="DataGridProgProcess_MouseDoubleClickAsync"
+                    IsReadOnly="True"
+                    AutoGenerateColumns="False"
+                    CanUserReorderColumns="False"
+                    CanUserResizeColumns="True"
+                    CanUserSortColumns="False"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    CanUserResizeRows="False"
+                    SelectionMode="Single"
+                    SelectionUnit="Cell"
+                    ColumnHeaderHeight="30"
+                    RowHeight="60"
+                    Margin="5">
+                    <DataGrid.Resources>
+                        <local:BindingProxy
+                            x:Key="proxy"
+                            Data="{Binding}" />
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn
+                            Width="120">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[0],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[0].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[0].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="400">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[1],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[1].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[1].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="120">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[2],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[2].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[2].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="120">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[3],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[3].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[3].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="120">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[4],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[4].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[4].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="120">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[5],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[5].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[5].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="120">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[6],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[6].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[6].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="120">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[7],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[7].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[7].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="400">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[8],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[8].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[8].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="120">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[9],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[9].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[9].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Width="120">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Data.StepTitles[10],Source={StaticResource proxy}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding Steps[10].Text}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style
+                                    TargetType="DataGridCell">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{Binding Steps[10].Color}" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </TabItem>
+        <TabItem
+            Header="Settings"
+            DataContext="{Binding SettingsView}"
+            IsEnabled="{Binding Enable}">
+            <UniformGrid
+                Rows="1"
+                Columns="3">
+                <StackPanel>
+                    <GroupBox
+                        Header="Simplicity Commander"
+                        Margin="5">
+                        <StackPanel>
+                            <CheckBox
+                                Height="30"
+                                VerticalContentAlignment="Center"
+                                Content="Autodetect Simplicity Commander"
+                                IsChecked="{Binding AutoDetectCommander}"
+                                Margin="5"
+                                Checked="CheckBoxAutoDetectCommander_Checked" />
+                            <DockPanel>
+                                <Label
+                                    Content="Simplicity Commander:"
+                                    VerticalContentAlignment="Center"
+                                    Margin="5" />
+                                <TextBox
+                                    VerticalContentAlignment="Center"
+                                    Height="30"
+                                    IsEnabled="{Binding EnableEditCommander}"
+                                    Text="{Binding CommanderFile}"
+                                    IsReadOnly="True"
+                                    Margin="5"
+                                    MouseDoubleClick="TextBoxCommander_MouseDoubleClick" />
+                            </DockPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox
+                        Header="ROM"
+                        Margin="5">
+                        <StackPanel>
+                            <DockPanel>
+                                <CheckBox
+                                    Content="ROM1:"
+                                    VerticalContentAlignment="Center"
+                                    IsChecked="{ Binding FlashROM1}"
+                                    Margin="5" />
+                                <TextBox
+                                    VerticalContentAlignment="Center"
+                                    IsEnabled="{ Binding FlashROM1}"
+                                    Text="{Binding ROM1File}"
+                                    IsReadOnly="True"
+                                    Height="30"
+                                    Margin="5"
+                                    MouseDoubleClick="TextBoxRom1_MouseDoubleClick" />
+                            </DockPanel>
+                            <DockPanel>
+                                <CheckBox
+                                    Content="ROM2:"
+                                    VerticalContentAlignment="Center"
+                                    IsChecked="{ Binding FlashROM2}"
+                                    Margin="5" />
+                                <TextBox
+                                    VerticalContentAlignment="Center"
+                                    Height="30"
+                                    IsEnabled="{ Binding FlashROM2}"
+                                    Text="{Binding ROM2File}"
+                                    IsReadOnly="True"
+                                    Margin="5"
+                                    MouseDoubleClick="TextBoxRom2_MouseDoubleClick" />
+                            </DockPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox
+                        Header="Others"
+                        Margin="5">
+                        <StackPanel>
+                            <CheckBox
+                                Height="30"
+                                VerticalContentAlignment="Center"
+                                Content="Generate Random MAC Address"
+                                IsChecked="{Binding RandomMAC}"
+                                IsEnabled="False"
+                                Margin="5" />
+                            <CheckBox
+                                Height="30"
+                                VerticalContentAlignment="Center"
+                                IsChecked="{Binding RandomInstallCode}"
+                                Content="Generate Random Zigbee 3.0 Install Code"
+                                IsEnabled="False"
+                                Margin="5" />
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+                <GroupBox
+                    Header="J-Link Configuration">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="3*" />
+                            <RowDefinition
+                                Height="2*" />
+                        </Grid.RowDefinitions>
+                        <DataGrid
+                            ItemsSource="{Binding JLinkList}"
+                            AutoGenerateColumns="False"
+                            CanUserReorderColumns="False"
+                            CanUserResizeColumns="True"
+                            CanUserSortColumns="False"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            CanUserResizeRows="False"
+                            SelectionMode="Single"
+                            SelectionUnit="FullRow"
+                            ColumnHeaderHeight="30"
+                            RowHeight="30"
+                            Grid.Row="0"
+                            Margin="5">
+                            <DataGrid.Resources>
+                                <local:BindingProxy
+                                    x:Key="proxy"
+                                    Data="{Binding}" />
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn
+                                    Width="2*">
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Text="Selection"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                TextAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox
+                                                IsChecked="{Binding Selection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn
+                                    Width="3*">
+                                    <DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Text="Serial Number"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                TextAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.HeaderTemplate>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Text="{Binding SerialNumber}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                TextAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel
+                            Grid.Row="1">
+                            <Button
+                                Height="30"
+                                Content="Reload J-Link List"
+                                Margin="5"
+                                IsEnabled="{Binding ButtonReloadJlinkListEnable}"
+                                Click="ButtonReloadJlinkList_ClickAsync" />
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+                <StackPanel>
+                    <Button
+                        Content="Save Settings"
+                        Height="30"
+                        Margin="5"
+                        Click="ButtonSaveSettings_ClickAsync" />
+                </StackPanel>
+            </UniformGrid>
+        </TabItem>
+    </TabControl>
+</Window>
