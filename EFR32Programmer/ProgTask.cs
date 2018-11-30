@@ -10,7 +10,7 @@ using static EFR32Programmer.ProgViewModel.ProgProcess.ProgStep;
 
 namespace EFR32Programmer
 {
-    class ProgTask
+    internal class ProgTask
     {
         public static string CommanderPath = string.Empty;
         public static string Rom1 = string.Empty;
@@ -201,7 +201,7 @@ namespace EFR32Programmer
                 StepUpdated(this, new ProgStepUpdatedEventArgs(ProgViewModel.N_CreateImage, null, null, "No available ROM files."));
                 return false;
             }
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--outfile", '\"' +Path.Combine(this.RomFolder, RomImageFull)+ '\"'),
                 ("--tokengroup", "znet"),
                 ("--token", "TOKEN_MFG_CUSTOM_EUI_64:"+this.MAC),
@@ -217,7 +217,7 @@ namespace EFR32Programmer
         private async Task<bool> ExtractFirmware()
         {
             string target = '\"' + Path.Combine(this.RomFolder, RomImageFull) + '\"';
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--outfile", '\"' +Path.Combine(this.RomFolder, RomImageFirmware)+ '\"'),
                 ("--range", "0x00000000:0x0FE04000"),
                 ("--range", "0x0FE04800:0xFFFFFFFF"),
@@ -232,7 +232,7 @@ namespace EFR32Programmer
         private async Task<bool> ExtractLockbits()
         {
             string target = '\"' + Path.Combine(this.RomFolder, RomImageFull) + '\"';
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--outfile", '\"' +Path.Combine(this.RomFolder, RomImageLockbits)+ '\"'),
                 ("--range", "0x0FE04000:0x0FE04800"),
                 ("--force", null)};
@@ -245,7 +245,7 @@ namespace EFR32Programmer
 
         private async Task<bool> ResetDevice()
         {
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--device", TargetDevice),
                 ("--serialno", this.JlinkSn)};
             bool result = await RunCommander("device", "reset", args);
@@ -265,7 +265,7 @@ namespace EFR32Programmer
 
         private async Task<bool> UnlockDevice()
         {
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--device", TargetDevice),
                 ("--debug", "disable"),
                 ("--serialno", this.JlinkSn)};
@@ -286,7 +286,7 @@ namespace EFR32Programmer
 
         private async Task<bool> MassErase()
         {
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--device", TargetDevice),
                 ("--serialno", this.JlinkSn),
                 ("--tif", DebugInterface)};
@@ -308,7 +308,7 @@ namespace EFR32Programmer
         private async Task<bool> FlashFirmware()
         {
             string target = '\"' + Path.Combine(this.RomFolder, RomImageFirmware) + '\"';
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--device", TargetDevice),
                 ("--serialno", this.JlinkSn),
                 ("--speed", DebugSpeed),
@@ -333,7 +333,7 @@ namespace EFR32Programmer
         private async Task<bool> FlashLockbits()
         {
             string target = '\"' + Path.Combine(this.RomFolder, RomImageLockbits) + '\"';
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--device", TargetDevice),
                 ("--serialno", this.JlinkSn),
                 ("--speed", DebugSpeed),
@@ -358,7 +358,7 @@ namespace EFR32Programmer
         private async Task<bool> VerifyImage()
         {
             string target = '\"' + Path.Combine(this.RomFolder, RomImageFull) + '\"';
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--device", TargetDevice),
                 ("--serialno", this.JlinkSn),
                 ("--speed", DebugSpeed),
@@ -380,7 +380,7 @@ namespace EFR32Programmer
 
         private async Task<bool> DumpTokens()
         {
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--device", TargetDevice),
                 ("--serialno", this.JlinkSn),
                 ("--tokengroup", "znet"),
@@ -397,8 +397,8 @@ namespace EFR32Programmer
             }
             string pattern1 = @"MFG_CUSTOM_EUI_64\s*:\s*([0-9A-F]{16})";
             string pattern2 = @"Install\s+Code\s*:\s*([0-9A-F]{32})";
-            var ms1 = Regex.Matches(this.ConsoleLog, pattern1);
-            var ms2 = Regex.Matches(this.ConsoleLog, pattern2);
+            MatchCollection ms1 = Regex.Matches(this.ConsoleLog, pattern1);
+            MatchCollection ms2 = Regex.Matches(this.ConsoleLog, pattern2);
             if (ms1.Count != 1 || ms2.Count != 1)
             {
                 StepUpdated(this, new ProgStepUpdatedEventArgs(ProgViewModel.N_DumpTokens, Status.Failure, "Fail", null));
@@ -426,7 +426,7 @@ namespace EFR32Programmer
 
         private async Task<bool> ResetDevice2()
         {
-            var args = new List<(string option, string argument)>() {
+            List<(string option, string argument)> args = new List<(string option, string argument)>() {
                 ("--device", TargetDevice),
                 ("--serialno", this.JlinkSn)};
             bool result = await RunCommander("device", "reset", args);
@@ -443,33 +443,39 @@ namespace EFR32Programmer
             }
             return result;
         }
-        public async Task<List<string>> GetJlinkList()
+        public async Task<(List<string> jlinkList, string commanderVersion)> GetJlinkList()
         {
-            var list = new List<string>();
+            List<string> list = new List<string>();
+            string version = string.Empty;
             if (!File.Exists(CommanderPath))
             {
                 MessageBox.Show("Commander.exe does not exist. Please check first.",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return list;
+                return (list, version);
             }
-            var args = new List<(string option, string argument)>() { ("--version", null) };
+            List<(string option, string argument)> args = new List<(string option, string argument)>() { ("--version", null) };
             bool result = await RunCommander(null, null, args);
             if (!result)
             {
-                var msg = new MsgWindow();
+                MsgWindow msg = new MsgWindow();
                 msg.SetTitle("Error");
                 msg.SetStep("Get Connected J-Link List");
                 msg.SetResult("Failure");
                 msg.SetMsg(this.ConsoleLog);
                 msg.Show();
-                return list;
+                return (list, version);
             }
             string pattern = @"Emulator\s+found\s+with\s+SN=([0-9]{8})\s+USBAddr=([0-9]+)";
             foreach (Match m in Regex.Matches(this.ConsoleLog, pattern))
             {
                 list.Add(m.Groups[1].Value);
             }
-            return list;
+            string pattern2 = @"Simplicity\s+Commander\s+([0-9a-zA-Z]+)";
+            foreach (Match m in Regex.Matches(this.ConsoleLog, pattern2))
+            {
+                version = m.Groups[1].Value;
+            }
+            return (list, version);
         }
 
         private string GetRandomHex(int length)
@@ -485,7 +491,7 @@ namespace EFR32Programmer
                 byte[] randomBytes = new byte[4];
                 RNGCryptoServiceProvider rngCrypto = new RNGCryptoServiceProvider();
                 rngCrypto.GetBytes(randomBytes);
-                Int32 rngNum = BitConverter.ToInt32(randomBytes, 0);
+                int rngNum = BitConverter.ToInt32(randomBytes, 0);
                 Random random = new Random(rngNum);
                 randomHex += hexCode[random.Next(0, 16)].ToString();
             }
@@ -537,7 +543,7 @@ namespace EFR32Programmer
 
         private Task<int> RunProcessAsync(Process process)
         {
-            var tcs = new TaskCompletionSource<int>();
+            TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
             process.Exited += (s, ea) => tcs.SetResult(process.ExitCode);
             process.OutputDataReceived += (sender, e) => this.ConsoleLog += e.Data + Environment.NewLine;
             process.ErrorDataReceived += (sender, e) => this.ConsoleLog += e.Data + Environment.NewLine;
@@ -552,7 +558,7 @@ namespace EFR32Programmer
             try
             {
                 string cmd = (command + " " + target).Trim();
-                foreach (var (option, argument) in args)
+                foreach ((string option, string argument) in args)
                 {
                     cmd += " " + option + " " + argument;
                     cmd = cmd.Trim();

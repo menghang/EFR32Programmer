@@ -378,6 +378,18 @@
                                     Margin="5"
                                     MouseDoubleClick="TextBoxCommander_MouseDoubleClick" />
                             </DockPanel>
+                            <DockPanel>
+                                <Label
+                                    Content="Commander Version:"
+                                    VerticalContentAlignment="Center"
+                                    Margin="5" />
+                                <TextBox
+                                    VerticalContentAlignment="Center"
+                                    Height="30"
+                                    Text="{Binding CommanderVersion}"
+                                    IsReadOnly="True"
+                                    Margin="5" />
+                            </DockPanel>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox

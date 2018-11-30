@@ -34,12 +34,13 @@ namespace EFR32Programmer
 
         private async Task GetJlinkList()
         {
-            var list = await this.jlink.GetJlinkList();
+            (List<string> list, string version) = await this.jlink.GetJlinkList();
             this.view.SettingsView.JLinkList.Clear();
-            foreach (var sn in list)
+            foreach (string sn in list)
             {
                 this.view.SettingsView.JLinkList.Add(new SettingsViewModel.JLink() { Selection = true, SerialNumber = sn });
             }
+            this.view.SettingsView.CommanderVersion = version;
         }
 
         private async void MainWindow_LoadedAsync(object sender, RoutedEventArgs e)
@@ -49,8 +50,8 @@ namespace EFR32Programmer
 
         private async Task LoadConfig()
         {
-            var config = await this.configUtil.LoadConfig();
-            var settings = this.view.SettingsView;
+            Config config = await this.configUtil.LoadConfig();
+            SettingsViewModel settings = this.view.SettingsView;
             settings.AutoDetectCommander = config.AutoDetectCommander;
             settings.CommanderFile = config.Commander;
             settings.FlashROM1 = config.FlashROM1;
@@ -60,8 +61,9 @@ namespace EFR32Programmer
             settings.RandomMAC = true;//config.RandomMAC;
             settings.RandomInstallCode = true;//config.RandomInstallCode;
             settings.JLinkList.Clear();
-            var list = await this.jlink.GetJlinkList();
-            foreach (var j in list)
+            (List<string> list, string version) = await this.jlink.GetJlinkList();
+            settings.CommanderVersion = version;
+            foreach (string j in list)
             {
                 if (config.J_Link.Contains(j))
                 {
@@ -85,8 +87,8 @@ namespace EFR32Programmer
                 this.view.Running = false;
                 return;
             }
-            var resultList = new List<Task<bool>>();
-            foreach (var t in this.progTaskList)
+            List<Task<bool>> resultList = new List<Task<bool>>();
+            foreach (KeyValuePair<string, ProgTask> t in this.progTaskList)
             {
                 this.progTaskStatusList.Add(t.Key);
                 resultList.Add(t.Value.Run());
@@ -96,7 +98,7 @@ namespace EFR32Programmer
 
         private void GetProgTasks()
         {
-            var settings = this.view.SettingsView;
+            SettingsViewModel settings = this.view.SettingsView;
             ProgTask.CommanderPath = settings.CommanderFile;
             ProgTask.Rom1 = settings.FlashROM1 ? settings.ROM1File : string.Empty;
             ProgTask.Rom2 = settings.FlashROM2 ? settings.ROM2File : string.Empty;
@@ -105,15 +107,15 @@ namespace EFR32Programmer
             this.progTaskStatusList.Clear();
             this.progProcessList.Clear();
             this.view.ProgView.ProcessList.Clear();
-            foreach (var jlink in settings.JLinkList)
+            foreach (SettingsViewModel.JLink jlink in settings.JLinkList)
             {
                 if (jlink.Selection)
                 {
-                    var progProcess = new ProgViewModel.ProgProcess();
+                    ProgViewModel.ProgProcess progProcess = new ProgViewModel.ProgProcess();
                     progProcess.Steps[ProgViewModel.N_JLinkSN].Text = jlink.SerialNumber;
                     this.view.ProgView.ProcessList.Add(progProcess);
                     this.progProcessList.Add(jlink.SerialNumber, progProcess);
-                    var progTask = new ProgTask(jlink.SerialNumber, settings.RandomMAC, settings.RandomInstallCode);
+                    ProgTask progTask = new ProgTask(jlink.SerialNumber, settings.RandomMAC, settings.RandomInstallCode);
                     progTask.TaskProgressUpdated += ProgTask_TaskUpdated;
                     progTask.StepUpdated += ProgTask_StepUpdated;
                     progTask.TaskCompleted += ProgTask_TaskCompleted;
@@ -133,7 +135,7 @@ namespace EFR32Programmer
 
         private void ProgTask_StepUpdated(object sender, ProgTask.ProgStepUpdatedEventArgs e)
         {
-            var step = this.progProcessList[(sender as ProgTask).JlinkSn].Steps[e.Step];
+            ProgViewModel.ProgProcess.ProgStep step = this.progProcessList[(sender as ProgTask).JlinkSn].Steps[e.Step];
             if (e.Status != null)
             {
                 step.CurrentStatus = (ProgViewModel.ProgProcess.ProgStep.Status)e.Status;
@@ -162,8 +164,8 @@ namespace EFR32Programmer
 
         private async void ButtonSaveSettings_ClickAsync(object sender, RoutedEventArgs e)
         {
-            var settings = this.view.SettingsView;
-            var config = new Config(settings);
+            SettingsViewModel settings = this.view.SettingsView;
+            Config config = new Config(settings);
             await this.configUtil.SaveConfig(config);
         }
 
@@ -216,7 +218,7 @@ namespace EFR32Programmer
                 "D:" + defaultCommanderPath
             };
             bool commanderFound = false;
-            foreach (var p in pathList)
+            foreach (string p in pathList)
             {
                 string f = Path.Combine(p, "commander.exe");
                 if (File.Exists(f))
@@ -241,7 +243,7 @@ namespace EFR32Programmer
             {
                 return;
             }
-            var cell = (sender as DataGrid).CurrentCell;
+            DataGridCellInfo cell = (sender as DataGrid).CurrentCell;
             if (cell.Column == null)
             {
                 return;
@@ -259,8 +261,8 @@ namespace EFR32Programmer
             }
             else
             {
-                var msgWindow = new MsgWindow();
-                var step = (cell.Item as ProgViewModel.ProgProcess).Steps[cell.Column.DisplayIndex];
+                MsgWindow msgWindow = new MsgWindow();
+                ProgViewModel.ProgProcess.ProgStep step = (cell.Item as ProgViewModel.ProgProcess).Steps[cell.Column.DisplayIndex];
                 msgWindow.SetResult(step.Text);
                 msgWindow.SetMsg(step.DetailMsg);
                 msgWindow.SetTitle("J-Link SN: " + (cell.Item as ProgViewModel.ProgProcess).Steps[ProgViewModel.N_JLinkSN].Text);
